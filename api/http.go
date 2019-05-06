@@ -15,11 +15,6 @@ var METHODS_SUPPORTED = map[string]string{
 	"/ping":   "check if api service valid and backend bitcoin service healthy",
 	"/health": "check system status",
 	"/help":   "display this message",
-
-	// useful APIs here
-	"/install":   "install receiver",
-	"/uninstall": "uninstall/remove receiver",
-	"/list":      "list all avaliable receivers",
 }
 
 type ApiServer struct {

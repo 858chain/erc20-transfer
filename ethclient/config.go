@@ -4,37 +4,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/pkg/errors"
 )
-
-type WatchList string
-
-func (w WatchList) Contains(target string) bool {
-	return strings.Contains(strings.ToLower(string(w)), strings.ToLower(target))
-}
-
-func (w WatchList) List() []string {
-	newSlice := make([]string, 0)
-	for _, ele := range strings.Split(string(w), ",") {
-		newSlice = append(newSlice, ele)
-	}
-
-	return newSlice
-}
-
-func (w WatchList) ExceptEth() []string {
-	newSlice := make([]string, 0)
-	for _, ele := range strings.Split(string(w), ",") {
-		if strings.ToLower(ele) != "eth" {
-			newSlice = append(newSlice, ele)
-		}
-	}
-
-	return newSlice
-}
 
 type ContractConfig struct {
 	Address   string `json:"address"`
@@ -83,21 +60,29 @@ func (c *Config) SanityAndValidCheck() error {
 		return err
 	}
 
-	//c.ContractConfigs = make(map[string]ContractConfig)
-	//cc, err := loadContractConfig(contractName,
-	//filepath.Join(c.ERC20ContractsDir, fmt.Sprintf("%s.json", contractName)))
-	//if err != nil {
-	//return err
-	//}
+	c.ContractConfigs = make(map[string]ContractConfig)
 
-	//if !common.IsHexAddress(cc.Address) {
-	//return errors.New(fmt.Sprintf("%s address not valid", contractName))
-	//}
+	erc20Configs, err := ioutil.ReadDir(c.ERC20ContractsDir)
+	if err != nil {
+		return err
+	}
 
-	//if len(cc.Abi) == 0 {
-	//return errors.New(fmt.Sprintf("%s abi not valid", contractName))
-	//}
-	//c.ContractConfigs[contractName] = cc
+	for _, cfgFile := range erc20Configs {
+		name := filepath.Base(cfgFile.Name())
+		cc, err := loadContractConfig(name, cfgFile.Name())
+		if err != nil {
+			return err
+		}
+
+		if !common.IsHexAddress(cc.Address) {
+			return errors.New(fmt.Sprintf("%s address not valid", name))
+		}
+
+		if len(cc.Abi) == 0 {
+			return errors.New(fmt.Sprintf("%s abi not valid", name))
+		}
+		c.ContractConfigs[name] = cc
+	}
 
 	return nil
 }

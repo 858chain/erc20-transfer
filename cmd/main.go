@@ -23,7 +23,6 @@ func main() {
 	}
 
 	app.Before = func(c *cli.Context) error {
-		//return utils.InitLogger(c.String("log-level"), c.String("log-dir"), "json")
 		return utils.InitLogger(c.String("log-dir"))
 	}
 
