@@ -2,17 +2,10 @@ package ethclient
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"io/ioutil"
-	"sync"
 
-	"github.com/858chain/token-shout/notifier"
-	"github.com/858chain/token-shout/utils"
+	"github.com/858chain/erc20-transfer/utils"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/google/uuid"
 )
 
 type Client struct {
@@ -25,10 +18,6 @@ type Client struct {
 func New(config *Config) (*Client, error) {
 	client := &Client{
 		config: config,
-		noti:   notifier.New(),
-
-		lock:         sync.Mutex{},
-		balanceCache: make(map[string]float64),
 	}
 
 	err := client.connect()
@@ -41,7 +30,7 @@ func New(config *Config) (*Client, error) {
 
 func (c *Client) Start() error {
 	errCh := make(chan error, 1)
-	ctx := context.Background()
+	//ctx := context.Background()
 
 	return <-errCh
 }

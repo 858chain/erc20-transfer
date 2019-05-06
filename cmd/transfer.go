@@ -28,9 +28,8 @@ var startCmd = cli.Command{
 		apiServer := api.NewApiServer(c.String("http-listen-addr"))
 
 		cfg := &ethclient.Config{
-			RpcAddr:   c.String("rpc-addr"), // host
-			WatchList: ethclient.WatchList(c.String("watch-list")),
-			LogDir:    c.GlobalString("log-dir"),
+			RpcAddr: c.String("rpc-addr"), // host
+			LogDir:  c.GlobalString("log-dir"),
 
 			EthWalletDir:      c.String("eth-wallet-dir"),
 			ERC20ContractsDir: c.String("erc20-contracts-dir"),

@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 
-	"github.com/858chain/token-shout/ethclient"
+	"github.com/858chain/erc20-transfer/ethclient"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"

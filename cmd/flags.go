@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/urfave/cli"
 )
 

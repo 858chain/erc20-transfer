@@ -5,13 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
-	"time"
 
-	"github.com/858chain/token-shout/notifier"
-
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/pkg/errors"
 )
 
@@ -73,7 +68,7 @@ func (c *Config) SanityAndValidCheck() error {
 		return errors.New("WalletDir should not empty")
 	}
 
-	err = isValidDir(c.EthWalletDir)
+	err := isValidDir(c.EthWalletDir)
 	if err != nil {
 		return err
 	}
@@ -83,28 +78,26 @@ func (c *Config) SanityAndValidCheck() error {
 		return err
 	}
 
-	err := isValidDir(c.ERC20ContractsDir)
+	err = isValidDir(c.ERC20ContractsDir)
 	if err != nil {
 		return err
 	}
 
-	c.ContractConfigs = make(map[string]ContractConfig)
-	for _, contractName := range c.WatchList.ExceptEth() {
-		cc, err := loadContractConfig(contractName,
-			filepath.Join(c.ERC20ContractsDir, fmt.Sprintf("%s.json", contractName)))
-		if err != nil {
-			return err
-		}
+	//c.ContractConfigs = make(map[string]ContractConfig)
+	//cc, err := loadContractConfig(contractName,
+	//filepath.Join(c.ERC20ContractsDir, fmt.Sprintf("%s.json", contractName)))
+	//if err != nil {
+	//return err
+	//}
 
-		if !common.IsHexAddress(cc.Address) {
-			return errors.New(fmt.Sprintf("%s address not valid", contractName))
-		}
+	//if !common.IsHexAddress(cc.Address) {
+	//return errors.New(fmt.Sprintf("%s address not valid", contractName))
+	//}
 
-		if len(cc.Abi) == 0 {
-			return errors.New(fmt.Sprintf("%s abi not valid", contractName))
-		}
-		c.ContractConfigs[contractName] = cc
-	}
+	//if len(cc.Abi) == 0 {
+	//return errors.New(fmt.Sprintf("%s abi not valid", contractName))
+	//}
+	//c.ContractConfigs[contractName] = cc
 
 	return nil
 }

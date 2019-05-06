@@ -5,8 +5,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/858chain/token-shout/notifier"
-	"github.com/858chain/token-shout/utils"
+	"github.com/858chain/erc20-transfer/utils"
 
 	ethereum "github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -72,16 +71,16 @@ func (c *Client) erc20TranserWatcher(ctx context.Context, errCh chan error) {
 				utils.L.Info("To", transferEvent.To.Hex())
 				utils.L.Info("Value", transferEvent.Value)
 
-				float64Value, _ := weiToEther(transferEvent.Value).Float64()
-				utils.L.Info("Value In Ether", float64Value)
+				//float64Value, _ := weiToEther(transferEvent.Value).Float64()
+				//utils.L.Info("Value In Ether", float64Value)
 
-				event := notifier.NewERC20LogEvent(map[string]interface{}{
-					"address": eventLog.Address.Hex(),
-					"from":    transferEvent.From.Hex(),
-					"to":      transferEvent.To.Hex(),
-					"value":   transferEvent.Value,
-				})
-				c.noti.EventChan() <- event
+				//event := notifier.NewERC20LogEvent(map[string]interface{}{
+				//"address": eventLog.Address.Hex(),
+				//"from":    transferEvent.From.Hex(),
+				//"to":      transferEvent.To.Hex(),
+				//"value":   transferEvent.Value,
+				//})
+				//c.noti.EventChan() <- event
 			}
 		}
 	}
