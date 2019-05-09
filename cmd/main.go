@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/858chain/token-shout/utils"
+	"github.com/858chain/erc20-transfer/utils"
 
 	"github.com/urfave/cli"
 )

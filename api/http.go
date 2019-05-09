@@ -41,7 +41,7 @@ func (api *ApiServer) InitAndStartEthClient(cfg *ethclient.Config) (err error) {
 func (api *ApiServer) HealthCheck() (err error) {
 	err = api.client.Ping()
 	if err != nil {
-		err = errors.Wrap(err, "eth: ")
+		err = errors.Wrap(err, "erc20: ")
 	}
 
 	return err
@@ -54,6 +54,9 @@ func NewApiServer(addr string) *ApiServer {
 	}
 
 	r := gin.Default()
+
+	r.GET("/transfer", apiServer.Transfer)
+	r.GET("/getbalance", apiServer.GetBalance)
 
 	// misc API
 	r.GET("/ping", func(c *gin.Context) {
