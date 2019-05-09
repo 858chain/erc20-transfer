@@ -30,11 +30,7 @@ type ApiServer struct {
 // Error return if malformat config or rpc server unreachable.
 func (api *ApiServer) InitAndStartEthClient(cfg *ethclient.Config) (err error) {
 	api.client, err = ethclient.New(cfg)
-	if err != nil {
-		return err
-	}
-
-	return api.client.Start()
+	return err
 }
 
 // Check eth rpc server connectivity.
@@ -56,7 +52,7 @@ func NewApiServer(addr string) *ApiServer {
 	r := gin.Default()
 
 	r.GET("/transfer", apiServer.Transfer)
-	r.GET("/getbalance", apiServer.GetBalance)
+	r.GET("/list_balances", apiServer.ListBalances)
 
 	// misc API
 	r.GET("/ping", func(c *gin.Context) {

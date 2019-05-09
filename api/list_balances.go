@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (api *ApiServer) GetBalance(c *gin.Context) {
+func (api *ApiServer) ListBalances(c *gin.Context) {
 	address, found := c.GetQuery("address")
 	if !found {
 		c.JSON(http.StatusBadRequest, R("address must specified"))

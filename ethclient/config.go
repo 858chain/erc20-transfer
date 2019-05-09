@@ -17,13 +17,17 @@ type ContractConfig struct {
 	Address   string `json:"address"`
 	AbiBase64 string `json:"abi"`
 	Abi       []byte
+	Precision int
 }
 
 type Config struct {
 	// rpc addr, should be one of http://, ws://, ipc
-	RpcAddr           string
-	LogDir            string
-	EthWalletDir      string
+	RpcAddr      string
+	LogDir       string
+	EthWalletDir string
+
+	// password to unlock account
+	EthPassword       string
 	ERC20ContractsDir string
 	ContractConfigs   map[string]ContractConfig
 }

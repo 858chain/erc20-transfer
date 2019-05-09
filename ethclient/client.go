@@ -2,37 +2,50 @@ package ethclient
 
 import (
 	"context"
+	"errors"
+	"os"
 
 	"github.com/858chain/erc20-transfer/utils"
 
+	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/rpc"
 )
 
 type Client struct {
+	// client config
 	config *Config
+
+	// keystore - used to sign a tx
+	store *keystore.KeyStore
 
 	// rpc client
 	rpcClient *rpc.Client
 }
 
 func New(config *Config) (*Client, error) {
-	client := &Client{
-		config: config,
+	// keystore directory check
+	stat, err := os.Stat(config.EthWalletDir)
+	if err != nil {
+		return nil, err
 	}
 
-	err := client.connect()
+	if !stat.IsDir() {
+		return nil, errors.New("eth-wallet-dir is not directory")
+	}
+	store := keystore.NewKeyStore(config.EthWalletDir,
+		keystore.StandardScryptN, keystore.StandardScryptP)
+
+	// initialize client
+	client := &Client{
+		config: config,
+		store:  store,
+	}
+	err = client.connect()
 	if err != nil {
 		return nil, err
 	}
 
 	return client, nil
-}
-
-func (c *Client) Start() error {
-	errCh := make(chan error, 1)
-	//ctx := context.Background()
-
-	return <-errCh
 }
 
 func (c *Client) Ping() error {
