@@ -17,7 +17,8 @@ type ContractConfig struct {
 	Address   string `json:"address"`
 	AbiBase64 string `json:"abi"`
 	Abi       []byte
-	Precision int
+	// default 18
+	Decimals int
 }
 
 type Config struct {
