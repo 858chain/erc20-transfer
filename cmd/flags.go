@@ -24,6 +24,12 @@ var logDirFlag = cli.StringFlag{
 	Value:  "/var/log/",
 }
 
+var envFlag = cli.StringFlag{
+	Name:   "env",
+	Value:  "production",
+	EnvVar: "ENV",
+}
+
 var rpcAddrFlag = cli.StringFlag{
 	Name:   "rpc-addr",
 	Value:  "http://192.168.0.101:8545",

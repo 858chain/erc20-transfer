@@ -19,5 +19,5 @@ COPY --from=builder /go/src/app/bin/erc20-transfer /
 EXPOSE 8001
 WORKDIR /
 
-CMD ["/erc20-transfer", "run"]
+CMD ["/erc20-transfer", "start"]
 

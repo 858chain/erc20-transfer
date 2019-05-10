@@ -13,14 +13,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type ContractConfig struct {
-	Address   string `json:"address"`
-	AbiBase64 string `json:"abi"`
-	Abi       []byte
-	// default 18
-	Decimals int
-}
-
 type Config struct {
 	// rpc addr, should be one of http://, ws://, ipc
 	RpcAddr      string
@@ -66,7 +58,6 @@ func (c *Config) SanityAndValidCheck() error {
 	}
 
 	c.ContractConfigs = make(map[string]ContractConfig)
-
 	erc20Configs, err := ioutil.ReadDir(c.ERC20ContractsDir)
 	if err != nil {
 		return err
@@ -86,6 +77,12 @@ func (c *Config) SanityAndValidCheck() error {
 		if len(cc.Abi) == 0 {
 			return errors.New(fmt.Sprintf("%s abi not valid", name))
 		}
+
+		if cc.Decimals <= 0 {
+			return errors.New(fmt.Sprintf("%s decimals not valid", name))
+		}
+
+		// cache valid contractConfig
 		c.ContractConfigs[name] = cc
 	}
 

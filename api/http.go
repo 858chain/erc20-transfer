@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/858chain/erc20-transfer/ethclient"
 
@@ -44,17 +45,21 @@ func (api *ApiServer) HealthCheck() (err error) {
 }
 
 // Hook all HTTP routes and start listen on `addr`
-func NewApiServer(addr string) *ApiServer {
+func NewApiServer(addr, env string) *ApiServer {
 	apiServer := &ApiServer{
 		httpListenAddr: addr,
 	}
 
-	r := gin.Default()
+	if strings.ToLower(env) == "production" ||
+		strings.ToLower(env) == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
+	r := gin.Default()
 	g := r.Group("/v1")
 	g.GET("/addresses", apiServer.Addresses)
-	g.GET("/:contractAddress/transfer", apiServer.Transfer)
-	g.GET("/:contractAddress/list_balances", apiServer.ListBalances)
+	g.GET("/transfer", apiServer.Transfer)
+	g.GET("/list_balances", apiServer.ListBalances)
 
 	// misc API
 	r.GET("/ping", func(c *gin.Context) {

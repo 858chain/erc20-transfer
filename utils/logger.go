@@ -11,7 +11,7 @@ import (
 
 var L *log.Logger
 
-func InitLogger(logDir string) error {
+func InitLogger(logDir, logLevel, format string) error {
 	stat, err := os.Stat(logDir)
 	if err != nil && os.IsNotExist(err) {
 		fmt.Fprintf(os.Stderr, "log-dir %s not exists", logDir)
@@ -30,10 +30,15 @@ func InitLogger(logDir string) error {
 		return err
 	}
 
+	parsedLevel, err := log.ParseLevel(logLevel)
+	if err != nil {
+		parsedLevel = log.DebugLevel
+	}
+
 	L = &log.Logger{
 		Out:       logFile,
 		Formatter: new(log.JSONFormatter),
-		Level:     log.DebugLevel,
+		Level:     parsedLevel,
 	}
 
 	L.SetReportCaller(true)

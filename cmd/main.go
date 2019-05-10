@@ -20,10 +20,11 @@ func main() {
 	app.Flags = []cli.Flag{
 		logLevelFlag,
 		logDirFlag,
+		envFlag,
 	}
 
 	app.Before = func(c *cli.Context) error {
-		return utils.InitLogger(c.String("log-dir"))
+		return utils.InitLogger(c.String("log-dir"), c.String("log-level"), "json")
 	}
 
 	err := app.Run(os.Args)

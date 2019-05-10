@@ -26,7 +26,7 @@ var startCmd = cli.Command{
 	Action: func(c *cli.Context) error {
 
 		var err error
-		apiServer := api.NewApiServer(c.String("http-listen-addr"))
+		apiServer := api.NewApiServer(c.String("http-listen-addr"), c.GlobalString("env"))
 
 		cfg := &ethclient.Config{
 			RpcAddr: c.String("rpc-addr"), // host
