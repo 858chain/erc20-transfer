@@ -68,3 +68,10 @@ func (c *Client) connect() (err error) {
 
 	return nil
 }
+
+// valid contractAddress
+// - format valid
+// - in whitelite
+func (c *Client) ContractValid(contractAddress string) bool {
+	return true
+}

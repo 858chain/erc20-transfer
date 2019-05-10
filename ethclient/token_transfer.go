@@ -15,16 +15,16 @@ import (
 )
 
 type TransferRequest struct {
-	contractAddress string
-	fromAddress     string
-	toAddress       string
-	amount          float64
+	ContractAddress string
+	FromAddress     string
+	ToAddress       string
+	Amount          float64
 }
 
-func (c *Client) TokenTranser(contractName, contractAddress, fromAddress, toAddress string, amount float64) (string, error) {
-	hexContractAddress := common.HexToAddress(contractAddress)
-	hexFromAddress := common.HexToAddress(fromAddress)
-	hexToAddress := common.HexToAddress(toAddress)
+func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
+	hexContractAddress := common.HexToAddress(tr.ContractAddress)
+	hexFromAddress := common.HexToAddress(tr.FromAddress)
+	hexToAddress := common.HexToAddress(tr.ToAddress)
 
 	nonce, err := c.PendingNonceAt(context.Background(), hexFromAddress)
 	if err != nil {
@@ -44,7 +44,7 @@ func (c *Client) TokenTranser(contractName, contractAddress, fromAddress, toAddr
 
 	paddedAddress := common.LeftPadBytes(hexToAddress.Bytes(), 32)
 
-	utils.L.Info(amount)
+	utils.L.Info(tr.Amount)
 	// TODO
 	amountBig := new(big.Int)
 	amountBig.SetString("1000000000000000000000", 10) // 1000 tokens
@@ -86,7 +86,7 @@ func (c *Client) TokenTranser(contractName, contractAddress, fromAddress, toAddr
 	}
 
 	utils.L.Infof("ERC20TokenTranser contractAddress: %s, fromAddress: %s, toAddress: %s with amount %f",
-		contractAddress, fromAddress, toAddress, amount)
+		tr.ContractAddress, tr.FromAddress, tr.ToAddress, tr.Amount)
 	utils.L.Infof("txid: %s", signedTx.Hash().Hex())
 
 	return signedTx.Hash().Hex(), nil

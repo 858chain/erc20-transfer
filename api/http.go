@@ -51,8 +51,10 @@ func NewApiServer(addr string) *ApiServer {
 
 	r := gin.Default()
 
-	r.GET("/transfer", apiServer.Transfer)
-	r.GET("/list_balances", apiServer.ListBalances)
+	g := r.Group("/v1")
+	g.GET("/addresses", apiServer.Addresses)
+	g.GET("/:contractAddress/transfer", apiServer.Transfer)
+	g.GET("/:contractAddress/list_balances", apiServer.ListBalances)
 
 	// misc API
 	r.GET("/ping", func(c *gin.Context) {
