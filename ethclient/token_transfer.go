@@ -72,8 +72,8 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 		return "", err
 	}
 
-	unloadedAccount := accounts.Account{Address: hexFromAddress}
-	err = c.store.TimedUnlock(unloadedAccount, c.config.EthPassword, time.Duration(time.Second*10))
+	unlockedAccount := accounts.Account{Address: hexFromAddress}
+	err = c.store.TimedUnlock(unlockedAccount, c.config.EthPassword, time.Duration(time.Second*10))
 	if err != nil {
 		utils.L.Error(err)
 		return "", err
