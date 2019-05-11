@@ -64,31 +64,39 @@ func (c *Config) SanityAndValidCheck() error {
 	}
 
 	for _, cfgFile := range erc20Configs {
-		name := filepath.Base(cfgFile.Name())
-		cc, err := loadContractConfig(name, cfgFile.Name())
+		contractName := determineContractNameFromPath(cfgFile.Name())
+		cc, err := loadContractConfig(contractName,
+			filepath.Join(c.ERC20ContractsDir, cfgFile.Name()))
 		if err != nil {
 			return err
 		}
 
 		if !common.IsHexAddress(cc.Address) {
-			return errors.New(fmt.Sprintf("%s address not valid", name))
+			return errors.New(fmt.Sprintf("%s address not valid", contractName))
 		}
 
 		if len(cc.Abi) == 0 {
-			return errors.New(fmt.Sprintf("%s abi not valid", name))
-		}
-
-		if cc.Decimals <= 0 {
-			return errors.New(fmt.Sprintf("%s decimals not valid", name))
+			return errors.New(fmt.Sprintf("%s abi not valid", contractName))
 		}
 
 		// cache valid contractConfig
-		c.ContractConfigs[name] = cc
+		c.ContractConfigs[contractName] = cc
 	}
 
 	return nil
 }
 
+// return ContractConfig have the address as `address`
+func (c *Config) ContractConfigForAddress(address string) (ContractConfig, bool) {
+	for _, cc := range c.ContractConfigs {
+		if cc.Address == address {
+			return cc, true
+		}
+	}
+	return ContractConfig{}, false
+}
+
+// check directory is valid
 func isValidDir(dir string) error {
 	stat, err := os.Stat(dir)
 	if err != nil {
@@ -102,6 +110,7 @@ func isValidDir(dir string) error {
 	return nil
 }
 
+// load ContractConfig from fs
 func loadContractConfig(name, path string) (ContractConfig, error) {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -126,4 +135,8 @@ func loadContractConfig(name, path string) (ContractConfig, error) {
 	}
 
 	return contractConfig, nil
+}
+
+func determineContractNameFromPath(path string) string {
+	return strings.TrimSuffix(filepath.Base(path), ".json")
 }

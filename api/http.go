@@ -12,6 +12,9 @@ import (
 
 // http api list
 var METHODS_SUPPORTED = map[string]string{
+	"/v1/addressess": "retrieve all addresses",
+	"/v1/transfer":   "transfer money from one address to another",
+	"/v1/getbalance": "getbalance of a account",
 	// misc
 	"/ping":   "check if api service valid and backend bitcoin service healthy",
 	"/health": "check system status",

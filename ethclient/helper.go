@@ -73,6 +73,21 @@ func (client *Client) SendTransaction(ctx context.Context, tx *types.Transaction
 	return client.rpcClient.CallContext(ctx, nil, "eth_sendRawTransaction", common.ToHex(data))
 }
 
+func (client *Client) CallContract(ctx context.Context, msg ethereum.CallMsg, blockNumber *big.Int) ([]byte, error) {
+	var hex hexutil.Bytes
+	err := client.rpcClient.CallContext(ctx, &hex, "eth_call", toCallArg(msg), toBlockNumArg(blockNumber))
+	if err != nil {
+		return nil, err
+	}
+	return hex, nil
+}
+
+func (client *Client) CodeAt(ctx context.Context, account common.Address, blockNumber *big.Int) ([]byte, error) {
+	var result hexutil.Bytes
+	err := client.rpcClient.CallContext(ctx, &result, "eth_getCode", account, toBlockNumArg(blockNumber))
+	return result, err
+}
+
 func toCallArg(msg ethereum.CallMsg) interface{} {
 	arg := map[string]interface{}{
 		"from": msg.From,
@@ -102,4 +117,11 @@ func weiToEther(wei *big.Int) *big.Float {
 func etherToWei(ether float64) *big.Int {
 	weiInt64 := int64(ether * params.Ether)
 	return big.NewInt(weiInt64)
+}
+
+func toBlockNumArg(number *big.Int) string {
+	if number == nil {
+		return "latest"
+	}
+	return hexutil.EncodeBig(number)
 }

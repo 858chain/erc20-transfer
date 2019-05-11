@@ -26,10 +26,14 @@ func (api *ApiServer) GetBalance(c *gin.Context) {
 		return
 	}
 
-	balance, decimal, err := api.client.GetBalance(contractAddress, address)
+	balanceWrapper, err := api.client.GetBalance(contractAddress, address)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, R(fmt.Sprintf("%+v", err)))
 	} else {
-		c.JSON(http.StatusOK, R(gin.H{"balance": balance, "decimal": decimal}))
+		c.JSON(http.StatusOK, R(gin.H{"balance": balanceWrapper.Balance,
+			"decimal": balanceWrapper.Decimals,
+			"name":    balanceWrapper.Name,
+			"symbol":  balanceWrapper.Symbol,
+		}))
 	}
 }
