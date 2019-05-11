@@ -5,16 +5,19 @@ import (
 	"math/big"
 	"strings"
 
+	"github.com/858chain/erc20-transfer/utils"
+
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 )
 
 type BalanceWrapper struct {
-	Balance  *big.Int
-	Decimals *big.Int
-	Name     string
-	Symbol   string
+	Balance      *big.Int
+	Decimals     *big.Int
+	BalanceFloat float64
+	Name         string
+	Symbol       string
 }
 
 func (c *Client) GetBalance(contractAddress, address string) (*BalanceWrapper, error) {
@@ -27,6 +30,7 @@ func (c *Client) GetBalance(contractAddress, address string) (*BalanceWrapper, e
 
 	parsedAbi, err := abi.JSON(strings.NewReader(string(cc.Abi)))
 	if err != nil {
+		utils.L.Error(err)
 		return bw, err
 	}
 
@@ -35,21 +39,26 @@ func (c *Client) GetBalance(contractAddress, address string) (*BalanceWrapper, e
 
 	err = boundContract.Call(nil, &bw.Decimals, "decimals")
 	if err != nil {
+		utils.L.Error(err)
 		return bw, err
 	}
 
 	err = boundContract.Call(nil, &bw.Balance, "balanceOf", common.HexToAddress(address))
 	if err != nil {
+		utils.L.Error(err)
 		return bw, err
 	}
+	bw.BalanceFloat = bigIntFloat(bw.Balance, bw.Decimals.Int64())
 
 	err = boundContract.Call(nil, &bw.Name, "name")
 	if err != nil {
+		utils.L.Error(err)
 		return bw, err
 	}
 
 	err = boundContract.Call(nil, &bw.Symbol, "symbol")
 	if err != nil {
+		utils.L.Error(err)
 		return bw, err
 	}
 

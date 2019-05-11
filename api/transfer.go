@@ -36,6 +36,11 @@ func (api *ApiServer) Transfer(c *gin.Context) {
 		return
 	}
 
+	if fromAddress == toAddress {
+		c.JSON(http.StatusBadRequest, R("can not transfer to original address"))
+		return
+	}
+
 	amount, found := c.GetQuery("amount")
 	if !found {
 		c.JSON(http.StatusBadRequest, R("no amount specified"))

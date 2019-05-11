@@ -24,7 +24,10 @@ end
 $contracts.each_pair do |name, address|
 
   puts name
-  hash = {"address": address, "abi": get_abi_and_convert_to_base64(name)}
+  hash = {"address": address,
+          "abi": get_abi_and_convert_to_base64(name),
+          "decimals": 18
+  }
   puts hash.to_json
   puts "-" * 100
 end

@@ -79,6 +79,10 @@ func (c *Config) SanityAndValidCheck() error {
 			return errors.New(fmt.Sprintf("%s abi not valid", contractName))
 		}
 
+		if cc.Decimals <= 0 {
+			return errors.New("decimals not valid")
+		}
+
 		// cache valid contractConfig
 		c.ContractConfigs[contractName] = cc
 	}

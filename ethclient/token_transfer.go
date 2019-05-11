@@ -28,12 +28,14 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 
 	nonce, err := c.PendingNonceAt(context.Background(), hexFromAddress)
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
-	value := big.NewInt(0) // in wei (0 eth)
+	zeroAmount := big.NewInt(0) // in wei (0 eth)
 	gasPrice, err := c.SuggestGasPrice(context.Background())
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
@@ -45,8 +47,9 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 	paddedAddress := common.LeftPadBytes(hexToAddress.Bytes(), 32)
 
 	utils.L.Info(tr.Amount)
-	// TODO
+
 	amountBig := new(big.Int)
+
 	amountBig.SetString("1000000000000000000000", 10) // 1000 tokens
 	paddedAmount := common.LeftPadBytes(amountBig.Bytes(), 32)
 
@@ -60,28 +63,33 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 		Data: data,
 	})
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
 	chainID, err := c.NetworkID(context.Background())
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
 	unloadedAccount := accounts.Account{Address: hexFromAddress}
 	err = c.store.TimedUnlock(unloadedAccount, c.config.EthPassword, time.Duration(time.Second*10))
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
-	tx := types.NewTransaction(nonce, hexContractAddress, value, gasLimit, gasPrice, data)
+	tx := types.NewTransaction(nonce, hexContractAddress, zeroAmount, gasLimit, gasPrice, data)
 	signedTx, err := c.store.SignTx(unloadedAccount, tx, chainID)
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 
 	err = c.SendTransaction(context.Background(), signedTx)
 	if err != nil {
+		utils.L.Error(err)
 		return "", err
 	}
 

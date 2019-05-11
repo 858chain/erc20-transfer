@@ -125,3 +125,22 @@ func toBlockNumArg(number *big.Int) string {
 	}
 	return hexutil.EncodeBig(number)
 }
+
+func bigIntFloat(balance *big.Int, decimals int64) float64 {
+	if balance.Sign() == 0 {
+		return 0
+	}
+	bal := big.NewFloat(0)
+	bal.SetInt(balance)
+	pow := bigPow(10, decimals)
+	p := big.NewFloat(0)
+	p.SetInt(pow)
+	bal.Quo(bal, p)
+	f, _ := bal.Float64() // Float64, Accuracy
+	return f
+}
+
+func bigPow(a, b int64) *big.Int {
+	r := big.NewInt(a)
+	return r.Exp(r, big.NewInt(b), nil)
+}
