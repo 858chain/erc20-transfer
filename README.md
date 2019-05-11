@@ -25,3 +25,7 @@ $ curl -sSL 'localhost:8081/v1/getbalance?contract=0x722dd3F80BAC40c951b51BdD28D
   }
 }
 ```
+
+```bash
+curl -sSL 'localhost:8081/v1/transfer?contract=0x722dd3F80BAC40c951b51BdD28Dd19d435762180&from=0x3b8830D7EaA1D98FDa4E67A8607877537241d71c&to=0x6a151f72ab86afe61232d2368f41115e8c5a5b7b&amount=0.01'  | jq  .
+```

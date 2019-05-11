@@ -48,7 +48,7 @@ func (c *Client) GetBalance(contractAddress, address string) (*BalanceWrapper, e
 		utils.L.Error(err)
 		return bw, err
 	}
-	bw.BalanceFloat = bigIntFloat(bw.Balance, bw.Decimals.Int64())
+	bw.BalanceFloat, _ = bigIntToBigFloat(bw.Balance, int(bw.Decimals.Int64())).Float64()
 
 	err = boundContract.Call(nil, &bw.Name, "name")
 	if err != nil {

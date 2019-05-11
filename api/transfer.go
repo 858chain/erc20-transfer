@@ -52,7 +52,7 @@ func (api *ApiServer) Transfer(c *gin.Context) {
 		return
 	}
 	if converedAmount <= MINIMUM_AMOUNT {
-		c.JSON(http.StatusBadRequest, R(fmt.Sprintf("amount should bigger than %f", MINIMUM_AMOUNT)))
+		c.JSON(http.StatusBadRequest, R(fmt.Sprintf("amount should bigger than %d", MINIMUM_AMOUNT)))
 		return
 	}
 
@@ -61,6 +61,8 @@ func (api *ApiServer) Transfer(c *gin.Context) {
 		FromAddress:     fromAddress,
 		ToAddress:       toAddress,
 		Amount:          converedAmount,
+		//TODO
+		Decimals: 18,
 	})
 
 	if err != nil {

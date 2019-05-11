@@ -2,6 +2,7 @@ package ethclient
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 	"time"
 
@@ -19,6 +20,7 @@ type TransferRequest struct {
 	FromAddress     string
 	ToAddress       string
 	Amount          float64
+	Decimals        int
 }
 
 func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
@@ -47,10 +49,7 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 	paddedAddress := common.LeftPadBytes(hexToAddress.Bytes(), 32)
 
 	utils.L.Info(tr.Amount)
-
-	amountBig := new(big.Int)
-
-	amountBig.SetString("1000000000000000000000", 10) // 1000 tokens
+	amountBig := floatToBigInt(tr.Amount, tr.Decimals)
 	paddedAmount := common.LeftPadBytes(amountBig.Bytes(), 32)
 
 	var data []byte

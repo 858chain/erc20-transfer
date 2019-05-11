@@ -10,7 +10,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
 )
 
@@ -108,14 +107,14 @@ func toCallArg(msg ethereum.CallMsg) interface{} {
 	return arg
 }
 
-func weiToEther(wei *big.Int) *big.Float {
+func bigIntToBigFloat(wei *big.Int, decimals int) *big.Float {
 	weiFloat := new(big.Float)
 	weiFloat.SetString(wei.String())
-	return new(big.Float).Quo(weiFloat, big.NewFloat(math.Pow10(18)))
+	return new(big.Float).Quo(weiFloat, big.NewFloat(math.Pow10(decimals)))
 }
 
-func etherToWei(ether float64) *big.Int {
-	weiInt64 := int64(ether * params.Ether)
+func floatToBigInt(ether float64, decimals int) *big.Int {
+	weiInt64 := int64(ether * math.Pow10(decimals))
 	return big.NewInt(weiInt64)
 }
 
@@ -124,23 +123,4 @@ func toBlockNumArg(number *big.Int) string {
 		return "latest"
 	}
 	return hexutil.EncodeBig(number)
-}
-
-func bigIntFloat(balance *big.Int, decimals int64) float64 {
-	if balance.Sign() == 0 {
-		return 0
-	}
-	bal := big.NewFloat(0)
-	bal.SetInt(balance)
-	pow := bigPow(10, decimals)
-	p := big.NewFloat(0)
-	p.SetInt(pow)
-	bal.Quo(bal, p)
-	f, _ := bal.Float64() // Float64, Accuracy
-	return f
-}
-
-func bigPow(a, b int64) *big.Int {
-	r := big.NewInt(a)
-	return r.Exp(r, big.NewInt(b), nil)
 }
