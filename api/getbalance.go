@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (api *ApiServer) ListBalances(c *gin.Context) {
+func (api *ApiServer) GetBalance(c *gin.Context) {
 	contractAddress, found := c.GetQuery("contract")
 	if !found {
 		c.JSON(http.StatusBadRequest, R("contract must specified"))

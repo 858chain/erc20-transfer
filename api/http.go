@@ -59,7 +59,7 @@ func NewApiServer(addr, env string) *ApiServer {
 	g := r.Group("/v1")
 	g.GET("/addresses", apiServer.Addresses)
 	g.GET("/transfer", apiServer.Transfer)
-	g.GET("/list_balances", apiServer.ListBalances)
+	g.GET("/getbalance", apiServer.GetBalance)
 
 	// misc API
 	r.GET("/ping", func(c *gin.Context) {

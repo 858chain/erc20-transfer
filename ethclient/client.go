@@ -40,6 +40,7 @@ func New(config *Config) (*Client, error) {
 		config: config,
 		store:  store,
 	}
+
 	err = client.connect()
 	if err != nil {
 		return nil, err
