@@ -47,7 +47,7 @@ var ERC20ContractsDirFlag = cli.StringFlag{
 	EnvVar: "ERC20_CONTRACTS_DIR",
 }
 
-var ethWalletPasswordFlag = cli.StringFlag{
-	Name:   "eth-wallet-password",
-	EnvVar: "ETH_WALLET_PASSWORD",
+var ethUnlockPasswordFlag = cli.StringFlag{
+	Name:   "eth-unlock-password",
+	EnvVar: "ETH_UNLOCK_PASSWORD",
 }

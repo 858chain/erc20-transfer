@@ -2,7 +2,6 @@ package ethclient
 
 import (
 	"context"
-	"fmt"
 	"math/big"
 	"time"
 
@@ -73,14 +72,14 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 	}
 
 	unlockedAccount := accounts.Account{Address: hexFromAddress}
-	err = c.store.TimedUnlock(unlockedAccount, c.config.EthPassword, time.Duration(time.Second*10))
+	err = c.store.TimedUnlock(unlockedAccount, c.config.EthUnlockPassword, time.Duration(time.Second*10))
 	if err != nil {
 		utils.L.Error(err)
 		return "", err
 	}
 
 	tx := types.NewTransaction(nonce, hexContractAddress, zeroAmount, gasLimit, gasPrice, data)
-	signedTx, err := c.store.SignTx(unloadedAccount, tx, chainID)
+	signedTx, err := c.store.SignTx(unlockedAccount, tx, chainID)
 	if err != nil {
 		utils.L.Error(err)
 		return "", err

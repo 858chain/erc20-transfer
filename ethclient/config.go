@@ -20,7 +20,7 @@ type Config struct {
 	EthWalletDir string
 
 	// password to unlock account
-	EthPassword       string
+	EthUnlockPassword string
 	ERC20ContractsDir string
 	ContractConfigs   map[string]ContractConfig
 }

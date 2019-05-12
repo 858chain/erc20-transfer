@@ -18,7 +18,7 @@ var startCmd = cli.Command{
 		httpAddrFlag,
 		rpcAddrFlag,
 		ethWalletDirFlag,
-		ethWalletPasswordFlag,
+		ethUnlockPasswordFlag,
 		ERC20ContractsDirFlag,
 	},
 
@@ -33,7 +33,7 @@ var startCmd = cli.Command{
 			LogDir:  c.GlobalString("log-dir"),
 
 			EthWalletDir:      c.String("eth-wallet-dir"),
-			EthPassword:       c.String("eth-wallet-password"),
+			EthUnlockPassword: c.String("eth-unlock-password"),
 			ERC20ContractsDir: c.String("erc20-contracts-dir"),
 		}
 
