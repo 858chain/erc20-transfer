@@ -7,13 +7,14 @@ import (
 
 	"github.com/858chain/erc20-transfer/utils"
 
-	ethereum "github.com/ethereum/go-ethereum"
+	// ethereum "github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"golang.org/x/crypto/sha3"
 )
 
+//TransferRequest ...
 type TransferRequest struct {
 	ContractAddress string
 	FromAddress     string
@@ -22,6 +23,7 @@ type TransferRequest struct {
 	Decimals        int
 }
 
+//TokenTranser ...
 func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 	hexContractAddress := common.HexToAddress(tr.ContractAddress)
 	hexFromAddress := common.HexToAddress(tr.FromAddress)
@@ -56,14 +58,17 @@ func (c *Client) TokenTranser(tr *TransferRequest) (string, error) {
 	data = append(data, paddedAddress...)
 	data = append(data, paddedAmount...)
 
-	gasLimit, err := c.EstimateGas(context.Background(), ethereum.CallMsg{
-		To:   &hexToAddress,
-		Data: data,
-	})
-	if err != nil {
-		utils.L.Error(err)
-		return "", err
-	}
+	//For sending tokens, set the gas limit to 200000.
+	//This is what MEW suggest. Note that extra gas will return to your wallet. So don't worry about the high fee.
+	gasLimit := uint64(200000)
+	// gasLimit, err := c.EstimateGas(context.Background(), ethereum.CallMsg{
+	// 	To:   &hexToAddress,
+	// 	Data: data,
+	// })
+	// if err != nil {
+	// 	utils.L.Error(err)
+	// 	return "", err
+	// }
 
 	chainID, err := c.NetworkID(context.Background())
 	if err != nil {
