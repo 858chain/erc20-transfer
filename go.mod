@@ -2,7 +2,7 @@ module github.com/858chain/erc20-transfer
 
 require (
 	github.com/ethereum/go-ethereum v1.10.10
-	github.com/gin-gonic/gin v1.7.0
+	github.com/gin-gonic/gin v1.7.7
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.4.1
 	github.com/urfave/cli v1.22.1
